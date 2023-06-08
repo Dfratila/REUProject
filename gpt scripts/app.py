@@ -2,7 +2,7 @@ import os
 import openai
 import re
 
-openai.api_key = "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"
+openai.api_key = ""
 
 
 gpt_prompt = "only respond with a number; what is the sensor width of a DJI Mavic 2 Pro Drone with L1D-20c camera in millimeters"
