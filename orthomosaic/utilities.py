@@ -2,35 +2,44 @@ import cv2
 import os
 import numpy as np
 from pyexiv2 import Image
+import re
 
-def importData(imageDirectory):
+def importData(imageDirectory, resizedDirectory):
     '''
     :param imageDirectory: Name of the directory where images are stored in string form e.g. "datasets/images/"
     :return:
         allImages: A Python List of NumPy ndArrays containing images.
         imageCoords: A Python List of Python Dictionaries containing GPS coord lookups
     '''
+    imageTuples = []
     allImages = []
     imageCoords = []
     focalLength = 0
     sensorWidth = 0
     for filename in os.listdir(imageDirectory):
         f = os.path.join(imageDirectory, filename)
+        fResize = os.path.join(resizedDirectory, filename)
         if os.path.isfile(f):
             image = cv2.imread(f)
-            allImages.append(image)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            resize = cv2.imread(fResize)
+            resize = cv2.cvtColor(resize, cv2.COLOR_BGR2RGB)
+
+            imageTuples.append((resize, fResize))
 
             info = Image(f)
-            exif_info = info.read_exif()
+            resizeInfo = Image(fResize)
+            exif_info = resizeInfo.read_exif()
             xmp_info = info.read_xmp()
-            re = dict()
-            re['latitude'] = float(xmp_info['Xmp.drone-dji.GpsLatitude'])
-            re['longitude'] = float(xmp_info['Xmp.drone-dji.GpsLongitude'])
-            re['altitude'] = float(xmp_info['Xmp.drone-dji.RelativeAltitude'][1:])
-            re['filename'] = f
-            imageCoords.append(re)
+            gps = dict()
+            gps['latitude'] = float(xmp_info['Xmp.drone-dji.GpsLatitude'])
+            gps['longitude'] = float(xmp_info['Xmp.drone-dji.GpsLongitude'])
+            gps['altitude'] = float(xmp_info['Xmp.drone-dji.RelativeAltitude'][1:])
+            gps['filename'] = f
+            imageCoords.append(gps)
 
-    return allImages, sorted(imageCoords, key=lambda x: x['filename'])
+    imageTuples = sorted(imageTuples, key=lambda x: x[1], reverse=True)
+    return list(zip(*imageTuples))[0], sorted(imageCoords, key=lambda x: x['filename'])
 
 def display(title, image):
     '''
