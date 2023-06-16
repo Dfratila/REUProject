@@ -11,16 +11,7 @@ class Combiner:
         :param dataMatrix_: Matrix with all pose data in dataset.
         :return:
         '''
-        self.imageList = []
-        detector = cv2.ORB()
-        for i in range(0,len(imageList_)):
-            image = imageList_[i][::2,::2,:] #downsample the image to speed things up. 4000x3000 is huge!
-            # M = gm.computeUnRotMatrix(self.dataMatrix[i,:])
-            #Perform a perspective transformation based on pose information.
-            #Ideally, this will mnake each image look as if it's viewed from the top.
-            #We assume the ground plane is perfectly flat.
-            #correctedImage = gm.warpPerspectiveWithPadding(image,M)
-            self.imageList.append(image) #store only corrected images to use in combination
+        self.imageList = imageList_.copy()
         self.resultImage = self.imageList[0]
 
     def createMosaic(self):
@@ -43,8 +34,7 @@ class Combiner:
         Descriptor computation and matching.
         Idea: Align the images by aligning features.
         '''
-        detector = cv2.xfeatures2d_SURF.create(500) #SURF showed best results
-        detector.setExtended(True)
+        detector = cv2.SIFT_create()
         gray1 = cv2.cvtColor(image1,cv2.COLOR_BGR2GRAY)
         ret1, mask1 = cv2.threshold(gray1,1,255,cv2.THRESH_BINARY)
         kp1, descriptors1 = detector.detectAndCompute(gray1,mask1) #kp = keypoints
@@ -54,12 +44,12 @@ class Combiner:
         kp2, descriptors2 = detector.detectAndCompute(gray2,mask2)
 
         #Visualize matching procedure.
-        keypoints1Im = None
-        keypoints1Im = cv2.drawKeypoints(image1,kp1,keypoints1Im,color=(0,0,255))
-        util.display("KEYPOINTS",keypoints1Im)
-        keypoints2Im = None
-        keypoints2Im = cv2.drawKeypoints(image2,kp2,keypoints2Im,color=(0,0,255))
-        util.display("KEYPOINTS",keypoints2Im)
+        # keypoints1Im = None
+        # keypoints1Im = cv2.drawKeypoints(image1,kp1,keypoints1Im,color=(0,0,255))
+        # util.display("KEYPOINTS",keypoints1Im)
+        # keypoints2Im = None
+        # keypoints2Im = cv2.drawKeypoints(image2,kp2,keypoints2Im,color=(0,0,255))
+        # util.display("KEYPOINTS",keypoints2Im)
 
         matcher = cv2.BFMatcher() #use brute force matching
         matches = matcher.knnMatch(descriptors2,descriptors1, k=2) #find pairs of nearest matches
@@ -71,8 +61,8 @@ class Combiner:
         matches = copy.copy(good)
 
         #Visualize matches
-        matchDrawing = util.drawMatches(gray2,kp2,gray1,kp1,matches)
-        util.display("matches",matchDrawing)
+        # matchDrawing = util.drawMatches(gray2,kp2,gray1,kp1,matches)
+        # util.display("matches",matchDrawing)
 
         #NumPy syntax for extracting location data from match data structure in matrix form
         src_pts = np.float32([ kp2[m.queryIdx].pt for m in matches ]).reshape(-1,1,2)
@@ -138,4 +128,3 @@ class Combiner:
         util.display("result",result)
         cv2.imwrite("results/intermediateResult"+str(index2)+".png",result)
         return result
-

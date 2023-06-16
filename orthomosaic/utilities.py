@@ -1,7 +1,7 @@
 import cv2
+import os
 import numpy as np
 from pyexiv2 import Image
-import os
 
 def importData(imageDirectory):
     '''
@@ -12,6 +12,8 @@ def importData(imageDirectory):
     '''
     allImages = []
     imageCoords = []
+    focalLength = 0
+    sensorWidth = 0
     for filename in os.listdir(imageDirectory):
         f = os.path.join(imageDirectory, filename)
         if os.path.isfile(f):
@@ -25,10 +27,10 @@ def importData(imageDirectory):
             re['latitude'] = float(xmp_info['Xmp.drone-dji.GpsLatitude'])
             re['longitude'] = float(xmp_info['Xmp.drone-dji.GpsLongitude'])
             re['altitude'] = float(xmp_info['Xmp.drone-dji.RelativeAltitude'][1:])
-            #re['direction'] = float(exif_info['Exif.GPSInfo.GPSImgDirection'])
+            re['filename'] = f
             imageCoords.append(re)
 
-    return allImages, imageCoords
+    return allImages, sorted(imageCoords, key=lambda x: x['filename'])
 
 def display(title, image):
     '''

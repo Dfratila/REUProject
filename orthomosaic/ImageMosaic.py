@@ -3,45 +3,21 @@ Driver script. Execute this to perform the mosaic procedure.
 '''
 
 import utilities as util
-import Combiner
+from PIL import Image
+import geometry
+import numpy as np
 import cv2
 
-fileName = "./datasets/imageData.txt"
 imageDirectory = "./datasets/01052022/"
-allImages, image = util.importData(imageDirectory)
-print(image)
-# stitcher = cv2.Stitcher_create()
-#
-# #stitched = allImages[0]
-# #for i in range(1, len(allImages)):
-#     #(status, stitched) = stitcher.stitch([stitched, allImages[i]])
-# (status, stitched) = stitcher.stitch(allImages)
-# if status == 0:
-#     # cv2.imwrite("results/finalResult.png", stitched)
-#     # cv2.imshow("Result", stitched)
-#     # cv2.waitKey(0)
-# else:
-#     print("Failed status:" + str(status))
-'''
-myCombiner = Combiner.Combiner(allImages)
-result = myCombiner.createMosaic()
-util.display("RESULT", result)
-cv2.imwrite("results/finalResult.png", result)
-'''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+allImages, imageCoords = util.importData(imageDirectory)
+focalLength, sensorWidth, cameraBrand, cameraModel = geometry.getMetadata(imageDirectory)
+altitude = 15
+cm_per_pixel = (sensorWidth * altitude * 100) / (focalLength * allImages[0].shape[1])
+print(cm_per_pixel, cm_per_pixel * allImages[0].shape[0] / 100, cm_per_pixel * allImages[0].shape[1] / 100)
+print("\n")
+for i in range(len(imageCoords) - 1):
+    dist = geometry.GPStoMeters(imageCoords[i]['latitude'], imageCoords[i]['longitude'], imageCoords[i + 1]['latitude'], imageCoords[i + 1]['longitude'])
+    dist_horizontal = geometry.GPStoMeters(imageCoords[i]['latitude'], imageCoords[i]['longitude'], imageCoords[i]['latitude'], imageCoords[i + 1]['longitude'])
+    dist_vertical = np.sqrt(dist**2 - dist_horizontal**2)
+    bearing = geometry.GPStoBearing(imageCoords[i]['latitude'], imageCoords[i]['longitude'], imageCoords[i + 1]['latitude'], imageCoords[i + 1]['longitude'])
+    print(dist,dist_horizontal,dist_vertical, bearing)
