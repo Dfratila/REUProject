@@ -21,6 +21,6 @@ def resize_images(input_folder, output_folder, scale_percent):
                 image.save(output_path, exif=exif)
 
 
-input_folder = 'datasets/01052022'
-output_folder = 'datasets_resized/01052022'
-resize_images(input_folder, output_folder, 20)
+# input_folder = 'datasets/5_up'
+# output_folder = 'datasets_resized/5_up'
+# resize_images(input_folder, output_folder, 60)

@@ -4,7 +4,7 @@ import re
 
 def sensor(model):
     try:
-        openai.api_key_path = "../gpt_scripts/api-key"
+        openai.api_key_path = "./gpt_scripts/api-key"
         print(model)
         gpt_prompt = "only respond with a number; what is the sensor width of a " + model + " drone camera in millimeters"
 

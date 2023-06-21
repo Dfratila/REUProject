@@ -2,6 +2,7 @@ import cv2
 import os
 import numpy as np
 from pyexiv2 import Image
+from PIL import Image as Im
 import re
 
 def importData(imageDirectory, resizedDirectory):
@@ -22,8 +23,7 @@ def importData(imageDirectory, resizedDirectory):
         if os.path.isfile(f):
             image = cv2.imread(f)
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            resize = cv2.imread(fResize)
-            resize = cv2.cvtColor(resize, cv2.COLOR_BGR2RGB)
+            resize = Im.open(fResize).convert('RGBA')
 
             imageTuples.append((resize, fResize))
 
