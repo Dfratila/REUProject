@@ -6,7 +6,7 @@ import os
 import sys
 path = os.path.join(os.path.dirname(__file__), os.pardir)
 sys.path.append(path)
-from gpt_scripts import sensorWidth
+from gpt_scripts import gpt_scripts
 
 
 def computeUnRotMatrix(pose):
@@ -72,7 +72,7 @@ def getMetadata(image_path):
             focal_length = exif_data.get(37386)
             make = exif_data.get(271)
             model = exif_data.get(272)
-            sensor_width = sensorWidth.sensor(model)
+            sensor_width = gpt_scripts.sensor(model)
             return focal_length, sensor_width, make, model
     return None, None, None, None
 
