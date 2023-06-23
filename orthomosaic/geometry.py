@@ -66,7 +66,14 @@ def warpPerspectiveWithPadding(image, transformation):
 
 
 def getMetadata(image_path):
-    with Image.open(os.path.join(image_path, os.listdir(image_path)[0])) as img:
+    for fname in os.listdir(image_path):
+        meta_path = os.path.join(image_path, fname)
+        if os.path.isdir(meta_path):
+            continue
+        else:
+            break
+
+    with Image.open(meta_path) as img:
         if hasattr(img, '_getexif') and img._getexif() is not None:
             exif_data = img._getexif()
             focal_length = exif_data.get(37386)

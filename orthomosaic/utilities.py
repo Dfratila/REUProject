@@ -5,6 +5,7 @@ from pyexiv2 import Image
 from PIL import Image as Im
 import re
 
+
 def importData(imageDirectory, resizedDirectory):
     '''
     :param imageDirectory: Name of the directory where images are stored in string form e.g. "datasets/images/"

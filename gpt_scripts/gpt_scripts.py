@@ -1,4 +1,3 @@
-import os
 import openai
 import re
 import tiktoken
@@ -36,8 +35,19 @@ def analyze(path, confidence):
         encoding = tiktoken.get_encoding("cl100k_base")
         with open(path) as file:
             birds = json.load(file)
-            parse_json(birds, confidence)
 
+        count = parse_json(birds, confidence)
+        print(count)
+        gpt_prompt = ""
+        # response = openai.ChatCompletion.create(
+        #     model="gpt-3.5-turbo",
+        #     messages=[
+        #         {'role': 'user', 'content': gpt_prompt}
+        #     ],
+        #     temperature=0.0,
+        #     frequency_penalty=0.0,
+        #     max_tokens=5
+        # )
 
     except openai.error.AuthenticationError or FileNotFoundError:
         print("API key missing!")
@@ -51,4 +61,4 @@ def parse_json(file, confidence):
 
 
 if __name__ == "__main__":
-    analyze("./orthomosaic/datasets/2_up/General_Model/bird.json", 0.9)
+    analyze("./orthomosaic/datasets/2_up/General_Model/bird.json", 0.90)
