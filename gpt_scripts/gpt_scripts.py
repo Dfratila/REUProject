@@ -23,6 +23,7 @@ def sensor(model):
     except openai.error.AuthenticationError or FileNotFoundError:
         print("API key missing!")
     else:
+        print(response.choices)
         regex = re.compile("[A-Za-z]")
         num = float(regex.split(response.choices[0].message.content)[0])
         print(num)

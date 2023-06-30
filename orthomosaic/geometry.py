@@ -1,3 +1,5 @@
+import datetime
+
 import numpy as np
 import cv2
 import math as m
@@ -66,22 +68,21 @@ def warpPerspectiveWithPadding(image, transformation):
 
 
 def getMetadata(image_path):
-    for fname in os.listdir(image_path):
-        meta_path = os.path.join(image_path, fname)
-        if os.path.isdir(meta_path):
-            continue
-        else:
-            break
-
-    with Image.open(meta_path) as img:
+    sorted_dir = sorted(os.listdir(image_path))
+    with Image.open(os.path.join(image_path, sorted_dir[0])) as img:
         if hasattr(img, '_getexif') and img._getexif() is not None:
             exif_data = img._getexif()
             focal_length = exif_data.get(37386)
+            sensor_width = 7#13.2
             make = exif_data.get(271)
             model = exif_data.get(272)
-            sensor_width = gpt_scripts.sensor(model)
-            return focal_length, sensor_width, make, model
-    return None, None, None, None
+            date_time = exif_data.get(36867)
+            img_end = Image.open(os.path.join(image_path, sorted_dir[-1]))
+            end_date_time = img_end._getexif().get(36867)
+            date_format = '%Y:%m:%d %H:%M:%S'
+            flight_duration = datetime.strptime(end_date_time, date_format) - datetime.strptime(date_time, date_format)
+            return focal_length, sensor_width, make, model, date_time, flight_duration
+    return None, None, None, None, None
 
 
 def GPStoMeters(lat1, lon1, lat2, lon2):

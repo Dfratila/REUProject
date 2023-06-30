@@ -45,6 +45,25 @@ def main():
 
     ImageMosaic.mosaic(path, percentage, threshold)
 
+def weather():
+    rl = f"http://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={api_key}"
+    response = requests.get(url)
+    data = response.json()
+
+    # Extract the relevant weather information
+    temperature = data['main']['temp']
+    humidity = data['main']['humidity']
+    description = data['weather'][0]['description']
+    wind_speed = data['wind']['speed']
+    # Add more weather parameters as needed
+
+    # Print the weather information
+    print(f"Weather information for {date} at {time}")
+    print(f"Temperature: {temperature} K")
+    print(f"Humidity: {humidity}%")
+    print(f"Description: {description}")
+    print(f"Wind Speed: {wind_speed} m/s")
+
 
 if __name__ == "__main__":
     main()

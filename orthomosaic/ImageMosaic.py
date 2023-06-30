@@ -6,6 +6,7 @@ import numpy as np
 import orthomosaic.image_resizer as ir
 import gpt_scripts.gpt_scripts as gpt
 import math
+import datetime
 
 
 def mosaic(path, percent, threshold):
@@ -13,7 +14,7 @@ def mosaic(path, percent, threshold):
     resized_directory = path + "/resized"
     ir.resize_images(image_directory, resized_directory, percent)
     all_images, image_coords = util.importData(image_directory, resized_directory)
-    focal_length, sensor_width, camera_brand, camera_model = geometry.getMetadata(image_directory)
+    focal_length, sensor_width, camera_brand, camera_model, date = geometry.getMetadata(image_directory)
     print(focal_length)
     altitude = image_coords[0]['altitude']
     cm_per_pixel = (sensor_width * altitude * 100) / (focal_length * all_images[0].width)
