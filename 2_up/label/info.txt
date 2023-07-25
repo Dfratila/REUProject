@@ -1,0 +1,14 @@
+overlap offset between F0_DJI_0977 and F0_DJI_0978 is: delta_x 6 delta_y 2352
+overlap offset between F0_DJI_0978 and F0_DJI_0979 is: delta_x 18 delta_y 2349
+overlap offset between F0_DJI_0979 and F0_DJI_0980 is: delta_x 15 delta_y 2362
+overlap offset between F0_DJI_0980 and F0_DJI_0981 is: delta_x 27 delta_y 2370
+overlap offset between F0_DJI_0981 and F0_DJI_0982 is: delta_x 11 delta_y 2352
+overlap offset between F0_DJI_0982 and F0_DJI_0983 is: delta_x 0 delta_y 2371
+overlap offset between F0_DJI_0983 and F0_DJI_0984 is: delta_x 0 delta_y 2355
+overlap offset between F0_DJI_0984 and F0_DJI_0985 is: delta_x 10 delta_y 2364
+overlap offset between F0_DJI_0985 and F0_DJI_0986 is: delta_x 30 delta_y 2361
+overlap offset between F0_DJI_0986 and F0_DJI_0987 is: delta_x 0 delta_y 2365
+overlap offset between F0_DJI_0987 and F0_DJI_0988 is: delta_x 6 delta_y 2365
+Total anno =  1995
+Dup anno =  1493
+Total birds =  502

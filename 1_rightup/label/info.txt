@@ -1,0 +1,6 @@
+overlap offset between F2_DJI_0996 and F2_DJI_0997 is: delta_x 0 delta_y 1547
+overlap offset between F2_DJI_0997 and F2_DJI_0998 is: delta_x 12 delta_y 1562
+overlap offset between F2_DJI_0998 and F2_DJI_0999 is: delta_x 0 delta_y 2508
+Total anno =  887
+Dup anno =  442
+Total birds =  445
